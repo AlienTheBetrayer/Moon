@@ -1,0 +1,33 @@
+#include "Button.hpp"
+
+Moon::Console::Button::Button(const Rect& bounds) noexcept
+{
+    SetBounds(bounds);
+}
+
+void Moon::Console::Button::SetBounds(const Rect& bounds) noexcept
+{
+    m_Bounds = Rect{ bounds.left * 8, bounds.right * 8 - 1, bounds.top * 16, bounds.bottom * 16 + 15 };
+}
+
+Rect Moon::Console::Button::GetBounds(void) noexcept
+{
+    return m_Bounds;
+}
+
+bool Moon::Console::Button::IsCursorWithin(void) noexcept
+{
+    const Vector2& pos = Moon::Misc::SnapToConsole(Moon::Misc::GetCursorPosition());
+
+    return Moon::Misc::IsWithinRect(pos, m_Bounds);
+}
+
+void Moon::Console::Button::Render(void) noexcept
+{
+    for (int32_t y = m_Bounds.top / 16; y <= m_Bounds.bottom / 16; ++y) {
+        for (int32_t x = m_Bounds.left / 8; x <=  m_Bounds.right / 8; ++x) {
+            Moon::Console::GotoAxis({ x, y });
+            printf("#");
+        }
+    }
+}

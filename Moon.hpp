@@ -6,17 +6,15 @@
 #pragma once
 
 #ifdef _WIN32 
-// All Moon includes
-// C libraries
-#include <cstdint>
-
 // Moon components
 #include "Moon/Debug/Debug.hpp"
 #include "Moon/Console/Console.hpp"
 #include "Moon/Misc.hpp"
 
+// Other classes
+#include "Moon/Console/UI/Renderer/Renderer.hpp"
+
 // Moon UI components
-#include "Moon/Console/UI/Button/Button.hpp"
 #include "Moon/Console/UI/Rectangle/Rectangle.hpp"
 #else
 #error This library is only compatible with Windows

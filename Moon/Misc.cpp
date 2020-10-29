@@ -39,3 +39,8 @@ Vector2 Moon::Misc::SnapToConsole(const Vector2& position) noexcept
 
 	return Vector2{ point.x, point.y };
 }
+
+void Moon::Misc::Sleep(const int32_t ms) noexcept
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}

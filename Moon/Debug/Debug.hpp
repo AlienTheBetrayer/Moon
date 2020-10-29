@@ -6,9 +6,9 @@
 #pragma once
 
 #include "../Macros.hpp"
+#include "../Console/Console.hpp"
 
 #ifdef CPP17GRT
-#include "../vendor/ColorFormatter.hpp"
 #include <filesystem>
 namespace fs = std::filesystem;
 #else

@@ -1,6 +1,27 @@
 // Console.cpp
 
+
 #include "Console.hpp"
+
+#ifndef CPP17GRT
+std::unordered_map<std::string, int> Moon::Console::colors = {
+	{"dark_blue", 1},
+	{"green", 2},
+	{"light_blue", 3},
+	{"red", 4},
+	{"purple", 5},
+	{"orange", 6},
+	{"light_gray", 7},
+	{"dark_gray", 8},
+	{"blue", 9},
+	{"light_green", 10},
+	{"cyan", 11},
+	{"light_red", 12},
+	{"pink", 13},
+	{"yellow", 14},
+	{"white", 15}
+};
+#endif
 
 HANDLE Moon::Console::GetHandle(const DWORD type) noexcept
 {
@@ -86,4 +107,38 @@ void Moon::Console::GotoAxis(const Vector2& axis) noexcept
 	coord.Y = axis.y;
 
 	SetConsoleCursorPosition(GetHandle(), coord);
+}
+
+void Moon::Console::SetColor(const int32_t color) noexcept
+{
+	static const HANDLE hOut = GetHandle();
+	SetConsoleTextAttribute(hOut, static_cast<WORD>(color));
+}
+
+void Moon::Console::SetColor(const std::string& color) noexcept
+{
+	SetColor(colors[color]);
+}
+
+void Moon::Console::ColorPrint(const int32_t color, const std::string& text) noexcept
+{
+	SetColor(color);
+	printf(text.c_str());
+	SetColor("light_gray");
+}
+
+void Moon::Console::ColorPrint(const std::string& color, const std::string& text) noexcept
+{
+	ColorPrint(colors[color], text);
+}
+
+void Moon::Console::AxisColorPrint(const Vector2& pos, const int32_t color, const std::string& text) noexcept
+{
+	GotoAxis(pos);
+	ColorPrint(color, text);
+}
+
+void Moon::Console::AxisColorPrint(const Vector2& pos, const std::string& color, const std::string& text) noexcept
+{
+	AxisColorPrint(pos, colors[color], text);
 }

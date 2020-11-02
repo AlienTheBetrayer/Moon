@@ -24,16 +24,16 @@ namespace Moon {
 			template<typename... Ts>
 			void Push(Ts*... bases) noexcept {
 				Reserve(sizeof...(Ts));
-				(AddSingle(bases), ...);
+				(PushSingle(bases), ...);
 			}
 #endif
 			
 			void PopSingle(void) noexcept;
 			void Pop(const std::size_t n) noexcept;
 
-			void RenderAll(void) noexcept;
+			void RenderAll(void) const noexcept;
 		private:
-			std::vector<RectangleVirtualBase*> rectangles;
+			std::vector<RectangleVirtualBase*> m_Rectangles;
 		};
 	}
 }

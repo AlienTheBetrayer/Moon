@@ -2,8 +2,9 @@
 
 #include "Rectangle.hpp"
 
-void Moon::Console::Rectangle::Render(void) noexcept
+void Moon::Console::Rectangle::Render(void) const noexcept
 {
+    // PUT THIS IN SOME MISC OR SOMETHING
     if (!m_RenderingStyle->visible)
         return;
 

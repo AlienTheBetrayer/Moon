@@ -1,26 +1,20 @@
+// Rectangle.hpp
+
 #pragma once
 
+#include "../RectangleBase.hpp"
+#include "../RectangleVirtualBase.hpp"
 #include "../../Console.hpp"
-#include "../RectangleFrame.hpp"
-#include "../../../Misc.hpp"
 
 namespace Moon {
 	namespace Console {
-		class Button : public Moon::Console::RectangleFrame
-		{
+		class Button : public RectangleBase {
 		public:
-			Button(void) = default;
-			~Button(void) = default;
-			Button(const Rect& bounds) noexcept;
+			using RectangleBase::RectangleBase;
 
-			void SetBounds(const Rect& bounds) noexcept;
-			Rect GetBounds(void) noexcept;
+			void Render(void) const noexcept;
 
-			bool IsCursorWithin(void) noexcept;
-
-			void Render(void) noexcept;	
-		private:
-			Rect m_Bounds;
+			~Button(void) noexcept = default;
 		};
 	}
 }

@@ -9,10 +9,11 @@
 // Moon components
 #include "Moon/Debug/Debug.hpp"
 #include "Moon/Console/Console.hpp"
-#include "Moon/Misc.hpp"
+#include "Moon/Misc/Misc.hpp"
 
 // Other classes
 #include "Moon/Console/UI/Renderer/Renderer.hpp"
+#include "Moon/Console/UI/EventHandler/EventHandler.hpp"
 
 // Moon UI components
 #include "Moon/Console/UI/Rectangle/Rectangle.hpp"

@@ -13,7 +13,7 @@ namespace Moon {
 		public:
 			using RectangleBase::RectangleBase;
 
-			void Render(void) noexcept;
+			void Render(void) const noexcept;
 
 			~Rectangle(void) noexcept = default;
 		};

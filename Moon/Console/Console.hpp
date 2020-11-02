@@ -13,27 +13,30 @@
 #endif
 
 #include "../Macros.hpp"
-#include "../Misc.hpp"
+#include "../Misc/Misc.hpp"
 
 #include <unordered_map>
 #include <Windows.h>
 
 namespace Moon {
 	namespace Console {
-		HANDLE GetHandle(const DWORD type = STD_OUTPUT_HANDLE) noexcept;
-		HWND GetConsole(void) noexcept;
+		[[nodiscard]] HANDLE GetHandle(const DWORD type = STD_OUTPUT_HANDLE) noexcept;
+		[[nodiscard]] HWND GetConsole(void) noexcept;
 
 		void SetWindowSize(const Vector2& size) noexcept;
 		void SetBufferSize(const Vector2& size) noexcept;
 		void SetWindowPosition(const Vector2& pos) noexcept;
 
-		Vector2 GetWindowSize(void) noexcept;
-		Vector2 GetBufferSize(void) noexcept;
-		Rect GetWindowPosition(void) noexcept;
+		[[nodiscard]] Vector2 GetWindowSize(void) noexcept;
+		[[nodiscard]] Vector2 GetBufferSize(void) noexcept;
+		[[nodiscard]] Rect GetWindowPosition(void) noexcept;
 
 		void Center(void) noexcept;
 
-		bool IsCursorWithin(void) noexcept;
+		void SwitchConsoleSelection(void) noexcept;
+		void SetConsoleSelection(const bool selection = false) noexcept;
+
+		[[nodiscard]] bool IsCursorWithin(void) noexcept;
 
 		// Buffer
 #ifdef CPP17GRT
@@ -54,10 +57,14 @@ namespace Moon {
 			{"yellow", 14},
 			{"white", 15}
 		};
+
+		inline bool enabledConsoleSelection = true;
 #else
 		extern std::unordered_map<std::string, int32_t> colors;
+		extern bool enabledConsoleSelection;
 #endif
 		void GotoAxis(const Vector2& axis) noexcept;
+		void AxisPrint(const Vector2& axis, const std::string& text) noexcept;
 
 		void SetColor(const int32_t color) noexcept;
 		void SetColor(const std::string& color) noexcept;

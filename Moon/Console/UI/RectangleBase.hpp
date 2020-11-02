@@ -7,7 +7,7 @@
 #include "../Rect.hpp"
 #include "../Vector2.hpp"
 
-#include "../../Misc.hpp"
+#include "../../Misc/Misc.hpp"
 
 #include "RectangleVirtualBase.hpp"
 
@@ -21,11 +21,17 @@ namespace Moon {
 			RectangleBase(void) noexcept;
 			explicit RectangleBase(const Rect& bounds) noexcept;
 
+			// Style
 			void ApplyRenderingStyle(const RenderingStyle& style) noexcept;
-			void SetBounds(const Rect& bounds) noexcept;
-			Rect GetBounds(void) noexcept;
+			void SetColor(const char* color) noexcept;
+			void SetVisibility(const bool visibility) noexcept;
+			void SetSymbol(const char symbol) noexcept;
+			void SetFill(const bool fill) noexcept;
 
-			bool IsCursorWithin(void) noexcept;
+			// Bounds
+			void SetBounds(const Rect& bounds) noexcept;
+			[[nodiscard]] Rect GetBounds(void) const noexcept;
+			[[nodiscard]] bool IsCursorWithin(void) const noexcept;
 
 			virtual ~RectangleBase(void) noexcept = default;
 		private:

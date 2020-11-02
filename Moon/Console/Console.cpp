@@ -21,11 +21,13 @@ std::unordered_map<std::string, int> Moon::Console::colors = {
 	{"yellow", 14},
 	{"white", 15}
 };
+
+bool Moon::Console::enabledConsoleSelection = true;
 #endif
 
 HANDLE Moon::Console::GetHandle(const DWORD type) noexcept
 {
-	static const HANDLE hOut = GetStdHandle(type);
+	const HANDLE hOut = GetStdHandle(type);
 
 	return hOut;
 }
@@ -92,6 +94,27 @@ void Moon::Console::Center(void) noexcept
 	SetWindowPosition({ mRect.right / 2 - (cRect.right - cRect.left) / 2, mRect.bottom / 2 - (cRect.bottom - cRect.top) / 2 });
 }
 
+void Moon::Console::SwitchConsoleSelection(void) noexcept
+{
+	static const HANDLE hIn = GetHandle(STD_INPUT_HANDLE);
+
+	SetConsoleMode(hIn, enabledConsoleSelection ? ~ENABLE_QUICK_EDIT_MODE : ENABLE_QUICK_EDIT_MODE);
+
+	enabledConsoleSelection = !enabledConsoleSelection;
+}
+
+void Moon::Console::SetConsoleSelection(const bool selection) noexcept
+{
+	if (selection) {
+		if (!enabledConsoleSelection)
+			SwitchConsoleSelection();
+	}
+	else {
+		if (enabledConsoleSelection)
+			SwitchConsoleSelection();
+	}
+}
+
 bool Moon::Console::IsCursorWithin(void) noexcept
 {
 	Vector2 pos = Moon::Misc::GetCursorPosition();
@@ -107,6 +130,12 @@ void Moon::Console::GotoAxis(const Vector2& axis) noexcept
 	coord.Y = axis.y;
 
 	SetConsoleCursorPosition(GetHandle(), coord);
+}
+
+void Moon::Console::AxisPrint(const Vector2& axis, const std::string& text) noexcept
+{
+	GotoAxis(axis);
+	printf(text.c_str());
 }
 
 void Moon::Console::SetColor(const int32_t color) noexcept

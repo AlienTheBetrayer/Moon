@@ -1,33 +1,33 @@
 #include "Button.hpp"
 
-Moon::Console::Button::Button(const Rect& bounds) noexcept
+void Moon::Console::Button::Render(void) const noexcept
 {
-    SetBounds(bounds);
-}
+    // PUT THIS IN SOME MISC OR SOMETHING
+    if (!m_RenderingStyle->visible)
+        return;
 
-void Moon::Console::Button::SetBounds(const Rect& bounds) noexcept
-{
-    m_Bounds = Rect{ bounds.left * 8, bounds.right * 8 - 1, bounds.top * 16, bounds.bottom * 16 + 15 };
-}
+    auto print = [=](const Vector2& coords) noexcept -> void {
+        Moon::Console::GotoAxis(coords);
+        Moon::Console::SetColor(m_RenderingStyle->color);
+        printf("%c", m_RenderingStyle->symbol);
+    };
 
-Rect Moon::Console::Button::GetBounds(void) noexcept
-{
-    return m_Bounds;
-}
+    if (m_RenderingStyle->fill) {
+        for (int32_t y = m_Bounds.top / 16; y <= m_Bounds.bottom / 16; ++y)
+            for (int32_t x = m_Bounds.left / 8; x <= m_Bounds.right / 8; ++x)
+                print({ x, y });
+    }
+    else {
+        for (int32_t x = m_Bounds.left / 8; x <= m_Bounds.right / 8; ++x) {
+            print({ x, m_Bounds.top / 16 });
+            print({ x, m_Bounds.bottom / 16 });
+        }
 
-bool Moon::Console::Button::IsCursorWithin(void) noexcept
-{
-    const Vector2& pos = Moon::Misc::SnapToConsole(Moon::Misc::GetCursorPosition());
-
-    return Moon::Misc::IsWithinRect(pos, m_Bounds);
-}
-
-void Moon::Console::Button::Render(void) noexcept
-{
-    for (int32_t y = m_Bounds.top / 16; y <= m_Bounds.bottom / 16; ++y) {
-        for (int32_t x = m_Bounds.left / 8; x <=  m_Bounds.right / 8; ++x) {
-            Moon::Console::GotoAxis({ x, y });
-            printf("#");
+        for (int32_t y = m_Bounds.top / 16; y <= m_Bounds.bottom / 16; ++y) {
+            print({ m_Bounds.left / 8, y });
+            print({ m_Bounds.right / 8, y });
         }
     }
+
+    Moon::Console::SetColor("light_gray");
 }

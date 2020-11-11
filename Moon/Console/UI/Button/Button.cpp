@@ -1,3 +1,5 @@
+// Button.cpp
+
 #include "Button.hpp"
 
 void Moon::Console::Button::Render(void) const noexcept
@@ -6,7 +8,7 @@ void Moon::Console::Button::Render(void) const noexcept
     if (!m_RenderingStyle->visible)
         return;
 
-    auto print = [=](const Vector2& coords) noexcept -> void {
+    static const auto print = [=](const Vector2& coords) noexcept -> void {
         Moon::Console::GotoAxis(coords);
         Moon::Console::SetColor(m_RenderingStyle->color);
         printf("%c", m_RenderingStyle->symbol);

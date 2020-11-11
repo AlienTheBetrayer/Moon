@@ -1,4 +1,6 @@
 // Rectangle.hpp
+//
+// UI element that can show a rectangle with different colors
 
 #pragma once
 

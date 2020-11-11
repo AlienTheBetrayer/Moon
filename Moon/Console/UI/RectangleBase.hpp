@@ -4,13 +4,13 @@
 
 #pragma once
 
+#include <memory>
+
 #include "../Rect.hpp"
 #include "../Vector2.hpp"
-
 #include "../../Misc/Misc.hpp"
 
 #include "RectangleVirtualBase.hpp"
-
 #include "RenderingStyle.hpp"
 
 namespace Moon {
@@ -22,11 +22,18 @@ namespace Moon {
 			explicit RectangleBase(const Rect& bounds) noexcept;
 
 			// Style
+			RenderingStyle* GetRenderingStyle(void) const noexcept;
 			void ApplyRenderingStyle(const RenderingStyle& style) noexcept;
 			void SetColor(const char* color) noexcept;
 			void SetVisibility(const bool visibility) noexcept;
 			void SetSymbol(const char symbol) noexcept;
 			void SetFill(const bool fill) noexcept;
+			void SetOnHoverColor(const char* color) noexcept;
+			void SetOnPressedColor(const char* color) noexcept;
+			void SetOnReleasedColor(const char* color) noexcept;
+			void SetTextAlignment(const Moon::Console::RenderingStyle::TextAlignment textAlignment) noexcept;
+			void SetTextColor(const char* color) noexcept;
+			void SetFitInOutline(const bool fit) noexcept;
 
 			// Bounds
 			void SetBounds(const Rect& bounds) noexcept;
@@ -38,7 +45,7 @@ namespace Moon {
 			void Initialize(void) noexcept;
 		protected:
 			Rect m_Bounds;
-			RenderingStyle* m_RenderingStyle = nullptr;
+			RenderingStyle* m_RenderingStyle;
 		};
 	}
 }

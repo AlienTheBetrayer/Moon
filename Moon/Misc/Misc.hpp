@@ -32,6 +32,11 @@ namespace Moon {
 
 		// Other
 		void Sleep(const uint32_t ms) noexcept;
+
+		template<typename Ret = void, typename... Args>
+		void RunAsync(const std::function<Ret(Args...)>& func, Args&&... args) noexcept {
+			std::thread(func, std::forward<Args>(args)...).detach();
+		}
 		
 		// Key
 		[[nodiscard]] bool IsKeyPressed(const uint8_t key) noexcept;

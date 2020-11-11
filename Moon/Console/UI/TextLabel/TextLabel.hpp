@@ -1,24 +1,29 @@
-// Button.hpp
+// TextLabel.hpp
 //
-// UI element that you can press on
+// UI element that can display text
 
 #pragma once
-
-#include <memory>
 
 #include "../RectangleBase.hpp"
 #include "../RectangleVirtualBase.hpp"
 #include "../../Console.hpp"
 
+#include <string>
+
 namespace Moon {
 	namespace Console {
-		class Button : public RectangleBase {
+		class TextLabel : public RectangleBase
+		{
 		public:
 			using RectangleBase::RectangleBase;
 
 			void Render(void) const noexcept;
 
-			~Button(void) noexcept = default;	
+			void SetText(const std::string& str) noexcept;
+
+			~TextLabel(void) noexcept = default;
+		private:
+			std::string m_Text;
 		};
 	}
 }

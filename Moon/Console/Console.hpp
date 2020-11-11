@@ -18,24 +18,33 @@
 #include <unordered_map>
 #include <Windows.h>
 
+#undef SetConsoleTitle
+#undef GetConsoleTitle
+
 namespace Moon {
 	namespace Console {
 		[[nodiscard]] HANDLE GetHandle(const DWORD type = STD_OUTPUT_HANDLE) noexcept;
 		[[nodiscard]] HWND GetConsole(void) noexcept;
 
+		// Set console's properties
 		void SetWindowSize(const Vector2& size) noexcept;
 		void SetBufferSize(const Vector2& size) noexcept;
 		void SetWindowPosition(const Vector2& pos) noexcept;
 
+		// Get console's properties
 		[[nodiscard]] Vector2 GetWindowSize(void) noexcept;
 		[[nodiscard]] Vector2 GetBufferSize(void) noexcept;
 		[[nodiscard]] Rect GetWindowPosition(void) noexcept;
 
 		void Center(void) noexcept;
+		void SetTitle(const std::string& title) noexcept;
+		[[nodiscard]] std::string GetTitle(void) noexcept;
 
+		// Console selection
 		void SwitchConsoleSelection(void) noexcept;
 		void SetConsoleSelection(const bool selection = false) noexcept;
-
+		
+		// Cursor
 		[[nodiscard]] bool IsCursorWithin(void) noexcept;
 
 		// Buffer
@@ -63,6 +72,8 @@ namespace Moon {
 		extern std::unordered_map<std::string, int32_t> colors;
 		extern bool enabledConsoleSelection;
 #endif
+		[[nodiscard]] std::pair<std::string, int32_t> GetRandomColor(void) noexcept;
+
 		void GotoAxis(const Vector2& axis) noexcept;
 		void AxisPrint(const Vector2& axis, const std::string& text) noexcept;
 

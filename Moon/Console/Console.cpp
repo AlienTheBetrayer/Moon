@@ -1,6 +1,5 @@
 // Console.cpp
 
-
 #include "Console.hpp"
 
 #ifndef CPP17GRT
@@ -94,6 +93,20 @@ void Moon::Console::Center(void) noexcept
 	SetWindowPosition({ mRect.right / 2 - (cRect.right - cRect.left) / 2, mRect.bottom / 2 - (cRect.bottom - cRect.top) / 2 });
 }
 
+void Moon::Console::SetTitle(const std::string& title) noexcept
+{
+	SetConsoleTitleA(title.c_str());
+}
+
+// BROKEN
+std::string Moon::Console::GetTitle(void) noexcept
+{
+	char data[50];
+	GetConsoleTitleA(data, 50);
+
+	return std::string(data);
+}
+
 void Moon::Console::SwitchConsoleSelection(void) noexcept
 {
 	static const HANDLE hIn = GetHandle(STD_INPUT_HANDLE);
@@ -121,6 +134,12 @@ bool Moon::Console::IsCursorWithin(void) noexcept
 	Rect rect = GetWindowPosition();
 
 	return Moon::Misc::IsWithinRect(pos, rect);
+}
+
+std::pair<std::string, int32_t> Moon::Console::GetRandomColor(void) noexcept
+{
+	auto it = std::next(colors.begin(), rand() % 14 + 1);
+	return std::make_pair(it->first, it->second);
 }
 
 void Moon::Console::GotoAxis(const Vector2& axis) noexcept

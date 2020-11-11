@@ -1,5 +1,6 @@
+// Misc.cpp
+
 #include "Misc.hpp"
-// Random.cpp
 
 int32_t Moon::Misc::RandomRange(const int32_t min, const int32_t max) noexcept
 {

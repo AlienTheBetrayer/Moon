@@ -21,7 +21,7 @@ void Moon::Event::EventHandler::HookButton(Moon::Console::Button* button, const 
 	RunLoop();
 
 	m_ButtonEvents[button][evType] = function;
-}
+} 
 
 void Moon::Event::EventHandler::Unhook(Moon::Console::RectangleVirtualBase* element) noexcept
 {
@@ -36,31 +36,27 @@ void Moon::Event::EventHandler::Unhook(Moon::Console::RectangleVirtualBase* elem
 Moon::Event::EventArgs Moon::Event::EventHandler::CheckElementEvent(Moon::Console::RectangleVirtualBase* element, const Moon::Event::EventType evType) noexcept
 {
 	EventArgs args;
-	args.status = 0;
 
 	switch (evType) {
 	case EventType::IsMouseOver:
-		if (!element->IsCursorWithin()) {
-			args.status = -1;
-			break;
+		if (element->IsCursorWithin()) {
+			args.status = "ok";
+			args.mousePosition = Moon::Misc::SnapToConsole(Moon::Misc::GetCursorPosition());
 		}
 
 		break;
 	case EventType::IsMouseNotOver:
-		if (element->IsCursorWithin()) {
-			args.status = -1;
-			break;
+		if (!element->IsCursorWithin()) {
+			args.status = "ok";
+			args.mousePosition = Moon::Misc::SnapToConsole(Moon::Misc::GetCursorPosition());
 		}
 		
 		break;
 	case EventType::KeyPressedWithin:
-		if (!element->IsCursorWithin()) {
-			args.status = -1;
-			break;
+		if (element->IsCursorWithin()) {
+			args.status = "ok";
+			args.keysPressed = Moon::Misc::GetPressedKeys();
 		}
-
-		const auto pressedKeys = Moon::Misc::GetPressedKeys();
-		args.keysPressed = pressedKeys;
 
 		break;
 	}
@@ -73,24 +69,25 @@ Moon::Event::EventArgs Moon::Event::EventHandler::CheckWindowEvent(const WindowE
 	EventArgs args;
 	args.status = 0;
 
-	switch (evType) {
-	case WindowEventType::IsMouseOver:
+	static auto isMouseOver = [&args]() {
 		RECT cRect;
 		GetWindowRect(GetConsoleWindow(), &cRect);
 
-		if (!Moon::Misc::IsWithinRect(Moon::Misc::GetCursorPosition(), { cRect.left, cRect.right, cRect.top, cRect.bottom })) {
-			args.status = -1;
-			break;
+		return (Moon::Misc::IsWithinRect(Moon::Misc::GetCursorPosition(), { cRect.left, cRect.right, cRect.top, cRect.bottom }));
+	};
+
+	switch (evType) {
+	case WindowEventType::IsMouseOver:
+		if (isMouseOver()) {
+			args.status = "ok";
+			args.mousePosition = Moon::Misc::GetCursorPosition();
 		}
 
 		break;
 	case WindowEventType::IsMouseNotOver:
-		RECT cRect1;
-		GetWindowRect(GetConsoleWindow(), &cRect1);
-
-		if (Moon::Misc::IsWithinRect(Moon::Misc::GetCursorPosition(), { cRect1.left, cRect1.right, cRect1.top, cRect1.bottom })) {
-			args.status = -1;
-			break;
+		if (!isMouseOver()) {
+			args.status = "ok";
+			args.mousePosition = Moon::Misc::GetCursorPosition();
 		}
 
 		break;
@@ -101,14 +98,81 @@ Moon::Event::EventArgs Moon::Event::EventHandler::CheckWindowEvent(const WindowE
 
 Moon::Event::EventArgs Moon::Event::EventHandler::CheckButtonEvent(Moon::Console::Button* button, const ButtonEventType evType) noexcept
 {
+	static bool LMBDownDebounce = true;
+	static bool LMBReleaseDebounce = false;	
+	static bool RMBDownDebounce = true;
+	static bool RMBReleaseDebounce = false;
+
 	EventArgs args;
-	args.status = 0;
+
+	if (button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_LBUTTON)) {
+		LMBReleaseDebounce = true;
+	}
+
+	if (!Moon::Misc::IsKeyPressed(VK_LBUTTON)) {
+		LMBDownDebounce = true;
+	}
+
+
+	if (button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_RBUTTON)) {
+		RMBReleaseDebounce = true;
+	}
+
+	if (!Moon::Misc::IsKeyPressed(VK_RBUTTON)) {
+		RMBDownDebounce = true;
+	}
 
 	switch (evType) {
-	case ButtonEventType::IsPressed:
+	case ButtonEventType::IsLMBPressed:
 		if (!(button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_LBUTTON))) {
-			args.status = -1;
-			break;
+			args.status = "ok";
+		}
+
+		break;
+	case ButtonEventType::IsLMBReleased:
+		if (!(button->IsCursorWithin() && !Moon::Misc::IsKeyPressed(VK_LBUTTON))) {
+			args.status = "ok";
+		}
+
+		break;
+	case ButtonEventType::OnLMBDown:
+		if (button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_LBUTTON) && LMBDownDebounce) {
+			args.status = "ok";
+			LMBDownDebounce = false;
+		}
+
+		break;
+	case ButtonEventType::OnLMBRelease:
+		if (button->IsCursorWithin() && !Moon::Misc::IsKeyPressed(VK_LBUTTON) && LMBReleaseDebounce) {
+			args.status = "ok";
+			LMBReleaseDebounce = false;
+		}
+
+		break;
+
+	case ButtonEventType::IsRMBPressed:
+		if (!(button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_LBUTTON))) {
+			args.status = "ok";
+		}
+
+		break;
+	case ButtonEventType::IsRMBReleased:
+		if (!(button->IsCursorWithin() && !Moon::Misc::IsKeyPressed(VK_RBUTTON))) {
+			args.status = "ok";
+		}
+
+		break;
+	case ButtonEventType::OnRMBDown:
+		if (button->IsCursorWithin() && Moon::Misc::IsKeyPressed(VK_RBUTTON) && RMBDownDebounce) {
+			args.status = "ok";
+			RMBDownDebounce = false;
+		}
+
+		break;
+	case ButtonEventType::OnRMBRelease:
+		if (button->IsCursorWithin() && !Moon::Misc::IsKeyPressed(VK_RBUTTON) && RMBReleaseDebounce) {
+			args.status = "ok";
+			RMBReleaseDebounce = false;
 		}
 
 		break;
@@ -123,7 +187,7 @@ void Moon::Event::EventHandler::Run(void) const noexcept
 		Moon::Misc::IterateMap<Moon::Console::RectangleVirtualBase*, std::unordered_map<EventType, func_t>>(m_ElementsEvents, [](const auto& element, const auto& map) noexcept -> void {
 			Moon::Misc::IterateMap<EventType, func_t>(map, [&](const auto& evType, const auto& function) noexcept -> void {
 				const EventArgs args = CheckElementEvent(element, evType);
-				if (args.status != -1)
+				if (args.status == "ok")
 					function(args);
 			});
 		});
@@ -131,17 +195,17 @@ void Moon::Event::EventHandler::Run(void) const noexcept
 		Moon::Misc::IterateMap<Moon::Console::Button*, std::unordered_map<ButtonEventType, func_t>>(m_ButtonEvents, [](const auto& element, const auto& map) noexcept -> void {
 			Moon::Misc::IterateMap<ButtonEventType, func_t>(map, [&](const auto& evType, const auto& function) noexcept -> void {
 				const EventArgs args = CheckButtonEvent(element, evType);
-				if (args.status != -1)
+				if (args.status == "ok")
 					function(args);
 				});
 			});
 
 		Moon::Misc::IterateMap<WindowEventType, func_t>(m_WindowEvents, [](const auto& evType, const auto& function) noexcept -> void {
 			const EventArgs args = CheckWindowEvent(evType);
-			if (args.status != -1)
+			if (args.status == "ok")
 				function(args);
 		});
-
+			
 		if (m_Delay)
 			Moon::Misc::Sleep(m_Delay);
 	}

@@ -9,6 +9,7 @@
 #include "../Rect.hpp"
 #include "../Vector2.hpp"
 #include "../../Misc/Misc.hpp"
+#include "../Console.hpp"
 
 #include "RectangleVirtualBase.hpp"
 #include "RenderingStyle.hpp"

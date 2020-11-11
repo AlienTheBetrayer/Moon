@@ -93,4 +93,5 @@ bool Moon::Console::RectangleBase::IsCursorWithin(void) const noexcept
 void Moon::Console::RectangleBase::Initialize(void) noexcept
 {
 	m_RenderingStyle = new Moon::Console::RenderingStyle();
+	Moon::Console::SetConsoleSelection(false);
 }

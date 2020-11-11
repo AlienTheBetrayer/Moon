@@ -31,7 +31,7 @@ evHandler.HookButton(&button, Moon::Event::ButtonEventType::OnLMBDown, [](const 
 button.Render();
 ```
 ## Main idea
-The idea of this engine is to provide a really easy way to manipulate console and an ability to work like with the usual UI framework but in the console, and just make the experience coding in console much more convenient.
+The idea of this engine is to provide a really easy way to manipulate console and an ability to work like with the usual UI framework but in the console, and just make the experience whilst coding in console much more convenient.
 ## Roadmap
 - Add more UI elements
 - Make all the components feel complete

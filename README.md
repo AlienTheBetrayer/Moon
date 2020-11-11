@@ -1,6 +1,6 @@
 
 # Moon ![enter image description here](https://img.shields.io/github/license/AlienTheBetrayer/Moon?color=blue)
-![Icon](https://raw.githubusercontent.com/AlienTheBetrayer/Moon/main/icon.png)
+![Icon](https://raw.githubusercontent.com/AlienTheBetrayer/Moon/main/moonicon.png)
 
  - [Getting started](#getting-started)
 - [Example](#example)	

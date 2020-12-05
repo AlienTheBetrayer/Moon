@@ -39,4 +39,4 @@ The idea of this engine is to provide a really easy way to manipulate console an
 - Add more data structs such as Vector2 and their operator overloads
 - Better event system
 - Animations
-- Macros to prevent specific components from including
+- Settings to configure including files | Done
